@@ -165,7 +165,7 @@ def block_to_block_type(block: str):
 def markdown_to_html_node(markdown):
     content = list(map(block_to_html_node, markdown_to_blocks(markdown)))
 
-    return ParentNode("html", [ParentNode("body", content)])
+    return ParentNode("div", content)
 
 
 def block_to_html_node(block: str) -> ParentNode:
@@ -207,7 +207,7 @@ def block_to_paragraph_node(block: str):
 
 
 def block_to_quote_node(block: str):
-    quote = "\n".join(map(lambda line: line[1:], block.split("\n")))
+    quote = "\n".join(map(lambda line: line[1:].strip(), block.split("\n")))
     return ParentNode("blockquote", text_to_children(quote))
 
 
@@ -234,4 +234,4 @@ def text_to_children(text: str) -> List[LeafNode]:
     for line in map(text_to_textnodes, text.split("\n")):
         text_nodes.extend(line)
 
-    return [ParentNode("div", [text_node_to_html_node(n) for n in text_nodes])]
+    return [text_node_to_html_node(n) for n in text_nodes]
